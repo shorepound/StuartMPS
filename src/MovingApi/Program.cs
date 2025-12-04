@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -13,7 +14,15 @@ var configuration = builder.Configuration;
 
 // Add services
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection") ?? "Server=localhost,1433;Database=MovingDb;User=sa;Password=Your_password123;TrustServerCertificate=true;"));
+    options.UseSqlServer(
+        configuration.GetConnectionString("DefaultConnection") ?? "Server=localhost,1433;Database=MovingDb;User=sa;Password=Your_password123;TrustServerCertificate=true;",
+        sqlOptions => sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        )
+    )
+);
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     {

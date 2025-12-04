@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import Button from './Button'
-import DarkModeToggle from './DarkModeToggle'
+import { getRolesFromToken } from '../utils/auth'
 
 type Props = {
   children: React.ReactNode
@@ -10,6 +10,8 @@ type Props = {
 export default function Layout({ children }: Props) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
   const userEmail = typeof window !== 'undefined' ? localStorage.getItem('userEmail') : null
+  const roles = token ? getRolesFromToken(token) : []
+  const isAdmin = roles.includes('Admin')
 
   const logout = () => {
     if (typeof window !== 'undefined') {
@@ -34,11 +36,10 @@ export default function Layout({ children }: Props) {
             </div>
 
             <div className="flex items-center space-x-3">
-              <DarkModeToggle />
               {token ? (
                 <div className="flex items-center space-x-3">
                   {userEmail && <div className="text-sm text-gray-700 hidden sm:block">{userEmail}</div>}
-                  <Link to="/admin" className="px-3 py-1 text-sm bg-gray-100 rounded">Dashboard</Link>
+                  {isAdmin && <Link to="/admin" className="px-3 py-1 text-sm bg-gray-100 rounded">Dashboard</Link>}
                   <Button variant="secondary" onClick={logout}>Logout</Button>
                 </div>
               ) : (

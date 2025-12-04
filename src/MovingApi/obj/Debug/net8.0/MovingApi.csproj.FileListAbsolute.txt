@@ -270,3 +270,4 @@
 /Users/shorepound/Development/StuartMPS/src/MovingApi/obj/Debug/net8.0/MovingApi.pdb
 /Users/shorepound/Development/StuartMPS/src/MovingApi/obj/Debug/net8.0/MovingApi.genruntimeconfig.cache
 /Users/shorepound/Development/StuartMPS/src/MovingApi/obj/Debug/net8.0/ref/MovingApi.dll
+/Users/shorepound/Development/StuartMPS/src/MovingApi/obj/Debug/net8.0/MovingApi.sourcelink.json

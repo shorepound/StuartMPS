@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
 
 type Customer = {
@@ -15,6 +16,7 @@ export default function Admin() {
   const [loading, setLoading] = useState(true)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     let mounted = true
@@ -40,7 +42,12 @@ export default function Admin() {
       setLastName('')
     } catch (err) {
       console.error('Create failed', err)
-      alert('Create failed (are you admin?)')
+      const status = err?.response?.status
+      if (status === 401 || status === 403) {
+        navigate('/not-authorized')
+        return
+      }
+      alert('Create failed')
     }
   }
 
@@ -51,6 +58,11 @@ export default function Admin() {
       setCustomers((s) => s.filter((c) => c.customerId !== id))
     } catch (err) {
       console.error('Delete failed', err)
+      const status = err?.response?.status
+      if (status === 401 || status === 403) {
+        navigate('/not-authorized')
+        return
+      }
       alert('Delete failed')
     }
   }

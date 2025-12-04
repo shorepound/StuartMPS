@@ -8,6 +8,8 @@ cd "$ROOT"
 echo "Starting docker-compose..."
 docker compose up -d
 
+# Note: healthcheck-based waiting removed; migrations will retry until DB is ready.
+
 echo "Applying EF Core migrations (will retry until DB is ready)..."
 cd "$ROOT/src/MovingApi"
 RETRIES=12

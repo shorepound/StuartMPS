@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: moving_mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_password123
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    # healthcheck removed for development convenience (some images don't include mssql-tools)
+
+volumes:
+  mssql-data:

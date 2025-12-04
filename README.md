@@ -1,4 +1,4 @@
-# Moving App (sample)
+# Moving App
 
 This workspace contains a sample schema and skeleton apps for a Moving, Packing, and Storage application.
 
@@ -6,20 +6,63 @@ Quick start (macOS):
 
 1. Start SQL Server in Docker:
 
+
+This repository contains:
+- An ASP.NET Core Web API backend with Entity Framework Core and Identity (`src/MovingApi`).
+- A Vite + React + TypeScript frontend (`client`) with Tailwind CSS.
+- A Docker Compose setup that runs SQL Server for local development.
+
+**Requirements**
+- Docker Desktop (for the SQL Server container)
+- .NET 8 SDK (for the backend)
+- Node.js 18+ and npm (for the frontend)
+
+**Quick Start (macOS)**
+
+1. Start the database container:
+
 ```bash
 docker compose up -d
 ```
 
-2. Create the database and run schema (example using `sqlcmd`):
+2. Run the project bootstrap and start services (project root):
+
+# Moving App
+
+A small sample project demonstrating a Moving, Packing, and Storage application.
+
+This repository contains:
+- An ASP.NET Core Web API backend with Entity Framework Core and Identity (`src/MovingApi`).
+- A Vite + React + TypeScript frontend (`client`) with Tailwind CSS.
+- A Docker Compose setup that runs SQL Server for local development.
+
+**Requirements**
+- Docker Desktop (for the SQL Server container)
+- .NET 8 SDK (for the backend)
+- Node.js 18+ and npm (for the frontend)
+
+## Quick Start (macOS)
+
+1. Start the database container:
 
 ```bash
-docker exec -it moving_mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -Q "CREATE DATABASE MovingDb"
-docker exec -i moving_mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P Your_password123 -d MovingDb -i /var/opt/mssql/schema.sql
+docker compose up -d
 ```
 
-Alternatively run the SQL in `db/schema.sql` using your DB tool.
+2. Run the project bootstrap and start services (project root):
 
-3. Run the backend (requires .NET 8 SDK):
+```bash
+./scripts/start-all.sh
+```
+
+The `start-all.sh` script will:
+- Start docker-compose services.
+- Apply EF Core migrations (it will retry until the database accepts connections).
+- Start the backend and the frontend dev server.
+
+### Manual starts
+
+- Run backend:
 
 ```bash
 cd src/MovingApi
@@ -27,7 +70,7 @@ dotnet restore
 dotnet run
 ```
 
-4. Run the frontend (requires Node 18+):
+- Run frontend:
 
 ```bash
 cd client
@@ -35,19 +78,83 @@ npm install
 npm run dev
 ```
 
-Notes
-- The backend `appsettings.Development.json` points to `localhost:1433` with default SA password `Your_password123`. Update as needed.
-- I included EF Core models and `AppDbContext` but not migrations — you can create migrations with `dotnet ef migrations add Initial` and apply them.
-
-Tailwind (frontend)
-- Tailwind has been added to the `client` project. The project uses Vite + React; Tailwind configuration is in `client/tailwind.config.cjs` and PostCSS config is in `client/postcss.config.cjs`.
-- To install and run the frontend with Tailwind:
+- Apply EF Core migrations locally:
 
 ```bash
-cd client
-npm install
-npm run dev
+cd src/MovingApi
+dotnet ef database update
 ```
 
-- Styles are imported from `client/src/styles.css`, which includes `@tailwind` directives. Use Tailwind utility classes in components (example pages `Login.tsx`, `Register.tsx`, `Admin.tsx`, `Customers.tsx` have been updated).
-- Security note: `vite` was upgraded to a patched version to address an `esbuild` advisory. If you later upgrade or change Vite, re-check `npm audit` and verify the dev server.
+## Configuration
+
+- The default DB connection is configured for local dev in `src/MovingApi/appsettings.Development.json` (Server=localhost,1433; SA credentials). Update credentials if you change Docker or host settings.
+
+## Development notes
+
+- The backend seeds an admin role/user during startup when running in Development.
+- EF Core retry-on-failure is enabled to improve resilience during DB startup.
+- The frontend uses JWT for authentication; token parsing and role checks are implemented client-side for UI visibility. Protected endpoints are enforced server-side with `[Authorize(Roles = "Admin")]`.
+
+**Default seeded admin credentials (development)**
+
+```
+email: admin@example.com
+password: Admin123!
+```
+
+You can change these values in `src/MovingApi/appsettings.Development.json`.
+
+## Frontend (Tailwind + Vite)
+
+- Tailwind is configured in `client/tailwind.config.cjs` and PostCSS is in `client/postcss.config.cjs`.
+- Global styles are imported from `client/src/styles.css`.
+
+## Operational recommendations
+
+- Increase Docker Desktop memory to at least 4GB when running SQL Server locally. SQL Server images can be memory intensive and may be terminated by the host if memory is constrained.
+- Keep the `scripts/start-all.sh` migration retry logic — it helps when the database takes time to recover.
+- Consider using `restart: unless-stopped` in `docker-compose.yml` for local resilience against transient container crashes.
+- For live DB startup logs while SQL Server recovers, follow the container logs:
+
+```bash
+docker compose logs -f moving_mssql
+```
+
+## Troubleshooting
+
+- If the frontend or backend reports `Unable to connect to SQL Server` during startup, wait a minute and re-run migrations; the DB may still be recovering.
+- If you see OOM or process-killed errors for the SQL container, increase Docker memory and restart the container.
+
+Example health checks (useful when verifying services):
+
+```bash
+# health endpoint
+curl http://localhost:5000/health
+
+# customers endpoint
+curl http://localhost:5000/api/customers
+```
+
+## Contributing / Workflow
+
+- Use feature branches and open a PR for changes.
+- Keep migrations in sync: create EF migrations locally and include them in commits when modifying the data model.
+
+## Developer quick checklist
+1. Create a feature branch: `git checkout -b feat/your-feature`
+2. Start services: `./scripts/start-all.sh`
+3. Register a user via the frontend or API
+4. Login as the seeded admin (see credentials above) and verify the Admin UI
+5. Create EF migrations locally when changing models: `dotnet ef migrations add YourChange` and include them in commits
+6. Open a PR, request review, merge when green
+
+## Files to know
+- `src/MovingApi` — backend project (controllers, data, migrations)
+- `client` — frontend project (React + Vite + Tailwind)
+- `docker-compose.yml` — development services (SQL Server)
+- `scripts/start-all.sh` and `scripts/restart-all.sh` — convenience scripts to run/dev services
+
+---
+
+If you'd like, I can also create a `CONTRIBUTING.md` with more detailed guidelines.
+

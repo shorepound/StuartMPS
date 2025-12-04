@@ -34,3 +34,16 @@
 9:59:12 AM [vite] (client) hmr update /src/pages/Admin.tsx, /src/styles.css
 9:59:25 AM [vite] (client) hmr update /src/App.tsx
 9:59:34 AM [vite] (client) hmr update /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/pages/Login.tsx, /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/pages/Register.tsx, /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/pages/Customers.tsx, /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/components/Layout.tsx, /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/pages/Admin.tsx, /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/App.tsx, /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/components/Button.tsx, /src/styles.css
+10:07:19 AM [vite] (client) hmr update /src/components/FormField.tsx, /src/styles.css
+10:07:19 AM [vite] (client) page reload index.html
+10:07:19 AM [vite] (client) page reload src/main.tsx
+10:07:19 AM [vite] (client) hmr update /src/components/DarkModeToggle.tsx, /src/styles.css

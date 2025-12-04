@@ -1,0 +1,47 @@
+.DS_Store
+
+# Node dependencies
+node_modules/
+**/node_modules/
+client/node_modules/
+
+# Build outputs
+client/dist/
+dist/
+build/
+
+# Vite cache / logs
+node_modules/.vite/
+client/vite.log
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Logs and temp files
+*.log
+*.pid
+*.tmp
+tmp/
+temp/
+
+# Editors/IDE
+.vscode/
+.idea/
+.vs/
+
+# .NET build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Databases
+*.db
+*.sqlite
+
+# Coverage
+coverage/
+.nyc_output/
+.cache/

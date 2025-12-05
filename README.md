@@ -1,35 +1,4 @@
-# Moving App
-
-This workspace contains a sample schema and skeleton apps for a Moving, Packing, and Storage application.
-
-Quick start (macOS):
-
-1. Start SQL Server in Docker:
-
-
-This repository contains:
-- An ASP.NET Core Web API backend with Entity Framework Core and Identity (`src/MovingApi`).
-- A Vite + React + TypeScript frontend (`client`) with Tailwind CSS.
-- A Docker Compose setup that runs SQL Server for local development.
-
-**Requirements**
-- Docker Desktop (for the SQL Server container)
-- .NET 8 SDK (for the backend)
-- Node.js 18+ and npm (for the frontend)
-
-**Quick Start (macOS)**
-
-1. Start the database container:
-
-```bash
-docker compose up -d
-```
-
-2. Run the project bootstrap and start services (project root):
-
-# Moving App
-
-A small sample project demonstrating a Moving, Packing, and Storage application.
+# Moving Packing Storing
 
 This repository contains:
 - An ASP.NET Core Web API backend with Entity Framework Core and Identity (`src/MovingApi`).
@@ -154,7 +123,4 @@ curl http://localhost:5000/api/customers
 - `docker-compose.yml` — development services (SQL Server)
 - `scripts/start-all.sh` and `scripts/restart-all.sh` — convenience scripts to run/dev services
 
----
-
-If you'd like, I can also create a `CONTRIBUTING.md` with more detailed guidelines.
 
